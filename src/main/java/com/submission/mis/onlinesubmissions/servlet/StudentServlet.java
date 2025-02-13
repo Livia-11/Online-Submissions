@@ -1,6 +1,7 @@
 package com.submission.mis.onlinesubmissions.servlet;
 
 import com.submission.mis.onlinesubmissions.model.Student;
+import com.submission.mis.onlinesubmissions.util.HibernateUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
