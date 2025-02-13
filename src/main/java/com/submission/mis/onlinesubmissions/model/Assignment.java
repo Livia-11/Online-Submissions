@@ -4,7 +4,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -21,7 +20,7 @@ public class Assignment {
     private String description;
 
     @Column(nullable = false)
-    private LocalDate deadline;
+    private Date deadline;
 
     @ManyToOne
     @JoinColumn(name = "instructor_id", nullable = false)
@@ -34,7 +33,7 @@ public class Assignment {
     public void setTitle(String title) { this.title = title; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-    public LocalDate getDeadline() { return deadline; }
+    public Date getDeadline() { return deadline; }
     public void setDeadline(Date deadline) { this.deadline = deadline; }
     public Instructor getInstructor() { return instructor; }
     public void setInstructor(Instructor instructor) { this.instructor = instructor; }
