@@ -31,34 +31,47 @@ public class StudentServlet extends HttpServlet {
         String password = request.getParameter("password");
         String name = request.getParameter("name");
 
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction tx = session.beginTransaction();
+        Session session = HibernateUtil.getSession();
+        Transaction tx = null;
 
-        Student student = new Student(email, password, name);
-        session.save(student);
-
-        tx.commit();
-        session.close();
-
-        response.sendRedirect("login.jsp?success=registered");
+        try {
+            tx = session.beginTransaction();
+            Student student = new Student(email, password, name);
+            session.save(student);
+            tx.commit();
+            response.sendRedirect("login.jsp?success=registered");
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            e.printStackTrace();
+            response.sendRedirect("register.jsp?error=registration_failed");
+        } finally {
+            session.close();
+        }
     }
 
     private void loginStudent(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Student student = session.createQuery("FROM Student WHERE email = :email AND password = :password", Student.class)
-                .setParameter("email", email)
-                .setParameter("password", password)
-                .uniqueResult();
-        session.close();
+        Session session = HibernateUtil.getSession();
+        try {
+            Student student = session.createQuery(
+                            "FROM Student WHERE email = :email AND password = :password", Student.class)
+                    .setParameter("email", email)
+                    .setParameter("password", password)
+                    .uniqueResult();
 
-        if (student != null) {
-            request.getSession().setAttribute("student", student);
-            response.sendRedirect("dashboard.jsp");
-        } else {
-            response.sendRedirect("login.jsp?error=invalid_credentials");
+            if (student != null) {
+                request.getSession().setAttribute("student", student);
+                response.sendRedirect("dashboard.jsp");
+            } else {
+                response.sendRedirect("login.jsp?error=invalid_credentials");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect("login.jsp?error=login_failed");
+        } finally {
+            session.close();
         }
     }
 }
