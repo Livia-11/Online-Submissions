@@ -5,6 +5,7 @@ import jakarta.persistence.Table;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "assignments")
@@ -34,7 +35,7 @@ public class Assignment {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
     public LocalDate getDeadline() { return deadline; }
-    public void setDeadline(LocalDate deadline) { this.deadline = deadline; }
+    public void setDeadline(Date deadline) { this.deadline = deadline; }
     public Instructor getInstructor() { return instructor; }
     public void setInstructor(Instructor instructor) { this.instructor = instructor; }
 }
